@@ -1,0 +1,35 @@
+<a href ="/groups"> Dashboard</a>
+<a href ="/sessions/<%= session[:user_id] %>" data-method="delete">Logout</a><br><br>
+
+
+<h1><%= @group.name %></h1>
+
+
+<% if @group.is_member?(session[:user_id]) %>
+    <a href= "/members/<%= @group.id %>" data-method="delete"><button>Leave Group</button></a>
+<% else %>
+    <form action="/members" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="member[user_id]" value="<%= session[:user_id] %>">
+        <input type="hidden" name="member[group_id]" value="<%= @group.id %>">
+        <input type="submit" value="Join Group">
+    </form>
+<%end%>
+
+
+<br>
+<br>
+
+<p><%= @group.description %></p>
+
+<br>
+<br>
+<h3> Created by: <%= @group.user.name%></h3>
+<h3> Members: </h3><br>
+<table>
+<% @members.each do |member| %>
+    <tr>
+      <td width='20'></td><td><%= member.user.name %></td>
+    </tr>
+  <% end %>
+</table>

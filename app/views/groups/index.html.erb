@@ -1,0 +1,37 @@
+<h1> HI <%= @user.name %> ! </h1><br>
+<a href ="/sessions/<%= session[:user_id] %>" data-method="delete">Logout</a><br><br>
+
+
+
+<h1> Here are the organisations you may join</h1><br>
+
+<% @groups.each do |group| %>
+
+    <h2><a href= '/groups/<%= group.id %>'> <%= group.name %> </a> </h2><br>
+    <% if group.user_id == session[:user_id] %>
+        <h4><a href= "/groups/<%= group.id %>" data-method="delete"><button>Delete Group</button></a></h4><br>
+    <% end %>
+
+    <p> Members: <%= group.member_count %> </p>
+    <p> <%= group.description %> </p>
+<%end%>
+<br>
+<p>--------------------------------------------------------------------</p>
+<h1>Create a new organisation</h1>
+
+<form action ="/groups" method ="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+    <input type="hidden" name="group[user_id]" value="<%= session[:user_id] %>">
+
+    Org Name: <input type ="text" name= "group[name]"><br>
+    Description: <textarea name="group[description]"></textarea>
+   <input type ="submit" value ="Create"><br>
+   <% if flash[:errors] %>
+       <% flash[:errors].each do |error| %>
+         ><%= error %><br>
+       <% end %>
+    <% end %>
+</form>
+
+
+
